@@ -1,0 +1,33 @@
+The String::BitCount module for perl5 may be used to determine the
+number of one bits in strings and to show the number of bits in each
+byte of a string.
+
+To install this module, cd to the directory that this README file is
+in and type the following:
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+The 'make test' line is optional.
+
+Documentation for this module is part of the file BitCount.pm using
+the pod (Plain Old Documentation) format.  To convert it into manual
+page format, type something like the following:
+
+	pod2man BitCount.pm > BitCount.man
+
+To convert it into html format, type:
+
+	pod2html BitCount.pm
+
+(pod2html automatically creates a file named BitCount.html)
+
+Copyright (c) 1995, 1996 Winfried Koenig. All rights reserved.
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+-- 
+Winfried Koenig, Arendsstrasse 12, D-63075 Offenbach
+Phone: +49 69 868707,  Mail: <win@in.rhein-main.de>
