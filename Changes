@@ -5,3 +5,6 @@ Revision history for Perl extension String::BitCount.
 
 1.11  Wed Dec 11 14:09:35 1996
 	- integrate MakeMaker
+
+1.12  Thu Mar 27 23:50:32 2003
+        - warn on wide character arguments
