@@ -1,4 +1,4 @@
-# $Id: BitCount.pm,v 1.4 2003/03/28 16:21:38 win Exp $
+# $Id: BitCount.pm,v 1.6 2003/03/31 13:53:24 win Exp $
 
 package String::BitCount;
 
@@ -13,7 +13,7 @@ require Exporter;
 
 @ISA = qw(Exporter);
 
-$VERSION = "1.12";
+$VERSION = "1.13";
 
 @EXPORT = qw(BitCount showBitCount);
 
@@ -36,15 +36,15 @@ if (!$@) {
     $test .= ' && carp "Wide character in argument";';
 }
 
-eval <<EDQ;
-    sub BitCount {
-	# can't use join, wide char bug in v5.6
-	local \$_ = shift; while (\@_) { \$_ .= shift }
-	$test \$_ =~ tr/\\0-\\377/$bits/;
-	tr/1// + tr/2// * 2 + tr/3// * 3 + tr/4// * 4
-	       + tr/5// * 5 + tr/6// * 6 + tr/7// * 7 + tr/8// * 8;
+sub BitCount {
+    my $count = 0;
+    foreach (@_) {
+	$count += unpack("%32b*", $_);
     }
+    $count;
+}
 
+eval <<EDQ;
     sub showBitCount {
 	my(\@s) = \@_;
 	foreach (\@s) {
@@ -66,9 +66,6 @@ String::BitCount - count number of "1" bits in strings
 
   use String::BitCount;
 
-  # next line recommended for Perl versions 5.006 and newer.
-  use bytes;
-
   # get the number of bits in $string.
   my $count = BitCount($string);
 
@@ -82,9 +79,7 @@ String::BitCount - count number of "1" bits in strings
 
 =item BitCount LIST
 
-Joins the elements of LIST into a single string
-and returns the the number of bits in this string.
-Only code points in the range 0x00 .. 0xFF are allowed.
+Returns the the total number of "1" bits in the list.
 
 =item showBitCount LIST
 
@@ -93,12 +88,17 @@ the new elements to strings of digits showing the number
 of set bits in the original byte.  In array context returns
 the new list.  In scalar context joins the elements of the
 new list into a single string and returns the string.
+Only code points in the range 0x00 .. 0xFF are allowed.
 
 =back
 
 =head1 NOTES
 
-The arguments of this subroutines are restricted to strings of 
+The original BitCount design predated the introducing of the 'b'
+pack template. Now you should use
+C<$bit_count = unpack("%32b*", $string)>.
+
+The arguments of showBitCount are restricted to strings of
 characters having code points in the range 0x00 .. 0xFF.
 If any string argument has code points greater than 0xFF (255)
 a "Wide character" warning will be issued.
